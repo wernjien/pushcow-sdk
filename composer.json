@@ -1,4 +1,12 @@
 {
+    "name": "innoractive/pushcow-sdk",
+    "description": "PushCow SDK for PHP",
+    "authors": [
+        {
+            "name": "Tan Wern Jien",
+            "email": "wj@innoractive.com"
+        }
+    ],
     "require": {
         "php" : ">=5.6",
         "guzzlehttp/guzzle": "^6.5"
