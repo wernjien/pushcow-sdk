@@ -32,20 +32,6 @@ class PushCow
     protected $token;
 
     /**
-     * Create a new PushCow instance.
-     *
-     * @param  string  $base
-     * @param  string  $token
-     * @return void
-     */
-    public function __construct($base = '', $token = '')
-    {
-        $this->base = $base ?: static::getConfig('base');
-        $this->token = $token ?: static::getConfig('token');
-        $this->headers = $this->getHeaders();
-    }
-
-    /**
      * Handle dynamic static method calls into the method.
      *
      * @param  string  $method
@@ -58,11 +44,98 @@ class PushCow
     }
 
     /**
+     * Create a new PushCow instance.
+     *
+     * @param  string  $base
+     * @param  string  $token
+     * @return void
+     */
+    public function __construct($base = '', $token = '')
+    {
+        $this->init($base, $token);
+    }
+
+    /**
+     * Initialize the config on a PushCow instance.
+     *
+     * @param  string  $base
+     * @param  string  $token
+     * @return void
+     */
+    protected function init($base = '', $token = '')
+    {
+        $this->base = $base ?: static::getConfig('base');
+        $this->token = $token ?: static::getConfig('token');
+        $this->headers = $this->getHeaders();
+    }
+
+    /**
+     * Get the config for the given key.
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected function getConfig($key)
+    {
+        if (function_exists('config')) {
+            return config('push-notification.'.strtolower($key));
+        }
+
+        if (function_exists('getenv')) {
+            return getenv('PUSHCOW_'.strtoupper($key));
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the full endpoint URL.
+     *
+     * @param  string  $endpoint
+     * @return string
+     */
+    protected function getEndpoint($endpoint)
+    {
+        return rtrim($this->base, '/').'/'.ltrim($endpoint, '/');
+    }
+
+    /**
+     * Get the HTTP headers.
+     *
+     * @return array
+     */
+    protected function getHeaders()
+    {
+        return [
+            'Accept' => 'application/json',
+            'Authorization' => "Bearer {$this->token}",
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ];
+    }
+
+    /**
+     * Prepare the data for API request.
+     *
+     * @param  array  $data
+     * @return array
+     */
+    protected function prepareData(array $data)
+    {
+        $array = [];
+
+        foreach ($data as $key => $value) {
+            $array[Str::snake($key)] = $value;
+        }
+
+        return $array;
+    }
+
+    /**
      * Get the PushCow service status.
      *
      * @return object
      */
-    public function status()
+    protected function status()
     {
         $endpoint = static::getInstance()->getEndpoint('/');
         $options = ['headers' => static::getInstance()->headers];
@@ -80,7 +153,7 @@ class PushCow
      * @param  int  $userId
      * @return object
      */
-    public function registerDevice($deviceId, $token, $userId = null)
+    protected function registerDevice($deviceId, $token, $userId = null)
     {
         $endpoint = static::getInstance()->getEndpoint('devices');
         $options = [
@@ -101,7 +174,7 @@ class PushCow
      * @param  int  $userId
      * @return object
      */
-    public function unregisterDevice($deviceId = null, $token = null, $userId = null)
+    protected function unregisterDevice($deviceId = null, $token = null, $userId = null)
     {
         $endpoint = static::getInstance()->getEndpoint('devices');
         $options = [
@@ -122,7 +195,7 @@ class PushCow
      * @param  string  $data
      * @return object
      */
-    public function createMessage($recipients, $notification, $data = null)
+    protected function createMessage($recipients, $notification, $data = null)
     {
         $endpoint = static::getInstance()->getEndpoint('messages');
         $options = [
@@ -133,66 +206,5 @@ class PushCow
         $response = (new Client)->request('POST', $endpoint, $options);
 
         return json_decode($response->getBody()->getContents());
-    }
-
-    /**
-     * Get the HTTP headers.
-     *
-     * @return array
-     */
-    protected function getHeaders()
-    {
-        return [
-            'Accept' => 'application/json',
-            'Authorization' => "Bearer {$this->token}",
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ];
-    }
-
-    /**
-     * Get the full endpoint URL.
-     *
-     * @param  string  $endpoint
-     * @return string
-     */
-    protected function getEndpoint($endpoint)
-    {
-        return rtrim($this->base, '/').'/'.ltrim($endpoint, '/');
-    }
-
-    /**
-     * Get the config for the given key.
-     *
-     * @param  string  $key
-     * @return string
-     */
-    protected static function getConfig($key)
-    {
-        if (function_exists('config')) {
-            return config('push-notification.'.strtolower($key));
-        }
-
-        if (function_exists('getenv')) {
-            return getenv('PUSHCOW_'.strtoupper($key));
-        }
-
-        return '';
-    }
-
-    /**
-     * Prepare the data for API request.
-     *
-     * @param  array  $data
-     * @return array
-     */
-    protected static function prepareData(array $data)
-    {
-        $array = [];
-
-        foreach ($data as $key => $value) {
-            $array[Str::snake($key)] = $value;
-        }
-
-        return $array;
     }
 }

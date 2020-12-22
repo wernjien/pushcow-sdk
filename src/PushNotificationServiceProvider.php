@@ -15,7 +15,7 @@ class PushNotificationServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/push-notification.php' => config_path('push-notification.php'),
-        ]);
+        ], 'config');
     }
 
     /**
@@ -23,10 +23,5 @@ class PushNotificationServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-        $this->app->bind('pushcow', function () {
-            return new PushCow;
-        });
-    }
+    public function register() {}
 }
