@@ -23,10 +23,5 @@ class PushNotificationServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-        $this->app->bind('pushcow', function () {
-            return new PushCow;
-        });
-    }
+    public function register() {}
 }
