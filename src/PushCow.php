@@ -193,14 +193,15 @@ class PushCow
      * @param  string  $recipients
      * @param  string  $notification
      * @param  string  $data
+     * @param  string  $options
      * @return object
      */
-    protected function createMessage($recipients, $notification, $data = null)
+    protected function createMessage($recipients, $notification, $data = null, $options = null)
     {
         $endpoint = static::getInstance()->getEndpoint('messages');
         $options = [
             'headers' => static::getInstance()->headers,
-            'form_params' => static::prepareData(compact('recipients', 'notification', 'data')),
+            'form_params' => static::prepareData(compact('recipients', 'notification', 'data', 'options')),
         ];
 
         $response = (new Client)->request('POST', $endpoint, $options);
