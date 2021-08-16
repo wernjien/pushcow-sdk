@@ -148,17 +148,18 @@ class PushCow
     /**
      * To register or update an existing device.
      *
+     * @param  string  $platform
      * @param  string  $deviceId
      * @param  string  $token
      * @param  int  $userId
      * @return object
      */
-    protected function registerDevice($deviceId, $token, $userId = null)
+    protected function registerDevice($platform, $deviceId, $token, $userId = null)
     {
         $endpoint = static::getInstance()->getEndpoint('devices');
         $options = [
             'headers' => static::getInstance()->headers,
-            'form_params' => static::prepareData(compact('deviceId', 'token', 'userId')),
+            'form_params' => static::prepareData(compact('platform','deviceId', 'token', 'userId')),
         ];
 
         $response = (new Client)->request('POST', $endpoint, $options);
