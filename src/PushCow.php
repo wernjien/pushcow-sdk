@@ -159,7 +159,7 @@ class PushCow
         $endpoint = static::getInstance()->getEndpoint('devices');
         $options = [
             'headers' => static::getInstance()->headers,
-            'form_params' => static::prepareData(compact('platform','deviceId', 'token', 'userId')),
+            'form_params' => static::prepareData(compact('platform', 'deviceId', 'token', 'userId')),
         ];
 
         $response = (new Client)->request('POST', $endpoint, $options);
