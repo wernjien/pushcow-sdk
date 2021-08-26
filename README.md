@@ -33,7 +33,7 @@ PushCow::init('PUSHCOW_BASE_URL', 'PUSHCOW_APP_TOKEN');
 PushCow::status();
 
 // To register or update an existing device.
-PushCow::registerDevice($deviceId, $token, $userId);
+PushCow::registerDevice($platform, $deviceId, $token, $userId);
 
 // To unregister an existing device.
 PushCow::unregisterDevice($deviceId, $token, $userId);
