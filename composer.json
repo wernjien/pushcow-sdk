@@ -1,6 +1,7 @@
 {
     "name": "innoractive/pushcow-sdk",
     "description": "PushCow SDK for PHP",
+    "license": "MIT",
     "authors": [
         {
             "name": "Tan Wern Jien",
@@ -8,8 +9,11 @@
         }
     ],
     "require": {
-        "php" : ">=5.6",
-        "guzzlehttp/guzzle": "^6.5|^7.0"
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.9"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0"
     },
     "autoload": {
         "psr-4": {
