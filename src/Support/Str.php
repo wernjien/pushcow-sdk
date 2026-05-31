@@ -6,12 +6,8 @@ class Str
 {
     /**
      * Convert a string to snake case.
-     *
-     * @param  string  $value
-     * @param  string  $delimiter
-     * @return string
      */
-    public static function snake($value, $delimiter = '_')
+    public static function snake(string $value, string $delimiter = '_'): string
     {
         if (! ctype_lower($value)) {
             $value = preg_replace('/\s+/u', '', $value);
