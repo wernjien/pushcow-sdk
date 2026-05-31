@@ -1,6 +1,6 @@
 {
     "name": "innoractive/pushcow-sdk",
-    "description": "PushCow SDK for PHP",
+    "description": "PHP SDK for the PushCow API.",
     "license": "MIT",
     "authors": [
         {
